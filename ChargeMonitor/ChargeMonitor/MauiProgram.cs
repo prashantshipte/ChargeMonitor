@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui;
+﻿using ChargeMonitor.Services;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 
 namespace ChargeMonitor;
@@ -10,7 +11,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkit()  //  <- Needed 
             .ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -20,8 +21,13 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
-        builder.Services.AddSingleton<MainPageViewModel>();
+		//Register Services
+		builder.Services.AddSingleton<ISettingsService, SettingsService>();
+
+		//Register VM first as it needs to be injected in the View
+		builder.Services.AddSingleton<MainPageViewModel>();
         builder.Services.AddSingleton<MainPage>();
+
 
         return builder.Build();
 	}

@@ -1,9 +1,12 @@
 ﻿
+using ChargeMonitor.Services;
+
 namespace ChargeMonitor.ViewModels
 {
     public partial class MainPageViewModel : BaseViewModel
     {
         public ICommand BatteryMonitorSwitchToggledCommand { get; }
+        public ICommand SetBatteryChargeLimitCommand { get; }
 
         [ObservableProperty]
         bool isBatteryWatched;
@@ -11,13 +14,32 @@ namespace ChargeMonitor.ViewModels
         [ObservableProperty]
         int batteryChargeLimit;
 
-        public MainPageViewModel()
+        private readonly ISettingsService settingsService;
+        private const int defaultBatteryChargeLimit = 80;
+
+        public MainPageViewModel(ISettingsService _settingsService)
         {
+            settingsService = _settingsService;
             BatteryMonitorSwitchToggledCommand = new Command(BatteryMonitorSwitchToggled);
-            BatteryChargeLimit = 80;
+            SetBatteryChargeLimitCommand = new Command(SetBatteryChargeLimit);
+            
+            LoadSettings();
         }
 
-        private void BatteryMonitorSwitchToggled(object obj)
+
+        public void LoadSettings()
+        {
+            IsBatteryWatched = settingsService.Get<bool>(nameof(IsBatteryWatched), false);
+            BatteryChargeLimit = settingsService.Get<int>(nameof(BatteryChargeLimit), defaultBatteryChargeLimit);
+        }
+
+
+        private void SetBatteryChargeLimit()
+        {
+            settingsService.Save(nameof(BatteryChargeLimit), BatteryChargeLimit);
+        }
+
+        private void BatteryMonitorSwitchToggled()
         {
             if (!IsBatteryWatched)
             {
@@ -28,7 +50,7 @@ namespace ChargeMonitor.ViewModels
                 Battery.Default.BatteryInfoChanged -= Battery_BatteryInfoChanged;
             }
 
-            IsBatteryWatched = !IsBatteryWatched;
+            settingsService.Save(nameof(IsBatteryWatched), IsBatteryWatched);
         }
 
         private void Battery_BatteryInfoChanged(object sender, BatteryInfoChangedEventArgs e)

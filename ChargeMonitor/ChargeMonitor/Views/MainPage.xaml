@@ -66,6 +66,7 @@
                     HorizontalOptions="Start"                
                     OnColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}"
                     ThumbColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}"
+                    IsToggled="{Binding IsBatteryWatched}"
                     >
                     
                     <Switch.Behaviors>
@@ -91,6 +92,7 @@
                     PlaceholderColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"
                     IsEnabled="{Binding IsBatteryWatched}"
                     Text="{Binding BatteryChargeLimit, Mode=TwoWay}"
+                    ReturnCommand="{Binding SetBatteryChargeLimitCommand}"
                     />
                 <Label                   
                     Style="{StaticResource LargeLabel}"
@@ -110,7 +112,8 @@
                 IsEnabled="{Binding IsBatteryWatched}"
                 Value="{Binding BatteryChargeLimit, Mode=TwoWay}"
                 MinimumTrackColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}" 
-                ThumbColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}" 
+                ThumbColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}"
+                DragCompletedCommand="{Binding SetBatteryChargeLimitCommand}"
                 />
             
         </VerticalStackLayout>
