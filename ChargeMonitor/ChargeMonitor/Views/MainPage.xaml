@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ChargeMonitor.MainPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+
+    <!--<ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <Label
+                Text="Hello, World!"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+
+        </VerticalStackLayout>
+    </ScrollView>-->
+
+    <Grid RowDefinitions="Auto,*" RowSpacing="5">
+
+        <!--< Header Row >-->
+        <Grid 
+            ColumnDefinitions="Auto,*,Auto"
+            Grid.Row="0" 
+            BackgroundColor="{AppThemeBinding Light={StaticResource BarLight}, Dark={StaticResource BarDark}}" >
+            
+            <Label
+                    Grid.Column="0"
+                    Text="Charge Monitor" Style="{StaticResource LargeLabel}"                
+                    HorizontalOptions="Start" 
+                    HorizontalTextAlignment="Start"
+                    VerticalTextAlignment="Center" 
+                    Padding="10"/>
+
+            <ImageButton 
+                    Grid.Column="2"
+                    Source="settings.png"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    Padding="5"     
+                    HorizontalOptions="End" />
+            
+        </Grid>
+
+
+        <!--< Main content >-->
+        <VerticalStackLayout Grid.Row="1" >
+            <Grid ColumnDefinitions="*,Auto" >
+                <Label
+                    Grid.Column="0"
+                    Style="{StaticResource MediumLabel}"
+                    Text="Enable Charge Monitor "
+                    Padding="15,25,5,5"/>
+
+                <Switch 
+                    Margin="15"
+                    Grid.Column="1"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    Scale="1.25"
+                    VerticalOptions="Start"
+                    HorizontalOptions="Start"                
+                    OnColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}"
+                    ThumbColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}"
+                    >
+                    
+                    <Switch.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Toggled"
+                            Command="{Binding BatteryMonitorSwitchToggledCommand}" />
+                    </Switch.Behaviors>
+                </Switch>
+            </Grid>
+
+            <Label                   
+                    Style="{StaticResource MediumLabel}"
+                    Text="Notify me when battery is charged : "
+                    Padding="15"
+                    IsEnabled="{Binding IsBatteryWatched}"/>
+
+            <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                <Entry                    
+                    Keyboard="Numeric"
+                    FontSize="32"                                
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"
+                    PlaceholderColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"
+                    IsEnabled="{Binding IsBatteryWatched}"
+                    Text="{Binding BatteryChargeLimit, Mode=TwoWay}"
+                    />
+                <Label                   
+                    Style="{StaticResource LargeLabel}"
+                    VerticalTextAlignment="Center"
+                    Text="%"                    
+                    Padding="2"
+                    IsEnabled="{Binding IsBatteryWatched}"
+                    />
+            </HorizontalStackLayout>
+
+            <Slider
+                Margin="100,50"
+                x:Name="percentSlider"
+                Minimum="10"
+                Maximum="100" 
+                Scale="1.5"
+                IsEnabled="{Binding IsBatteryWatched}"
+                Value="{Binding BatteryChargeLimit, Mode=TwoWay}"
+                MinimumTrackColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}" 
+                ThumbColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}" 
+                />
+            
+        </VerticalStackLayout>
+        
+    </Grid>
+</ContentPage>
