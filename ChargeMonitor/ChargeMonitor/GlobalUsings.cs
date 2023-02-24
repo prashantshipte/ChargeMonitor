@@ -1,4 +1,6 @@
-﻿global using ChargeMonitor.ViewModels;
+﻿global using ChargeMonitor.Services;
+global using ChargeMonitor.Views;
+global using ChargeMonitor.ViewModels;
 global using CommunityToolkit.Mvvm.ComponentModel;
 global using CommunityToolkit.Mvvm.Input;
 global using CommunityToolkit.Maui;

@@ -1,6 +1,4 @@
-﻿using ChargeMonitor.Services;
-using CommunityToolkit.Maui;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace ChargeMonitor;
 
@@ -28,7 +26,8 @@ public static class MauiProgram
 		builder.Services.AddSingleton<MainPageViewModel>();
         builder.Services.AddSingleton<MainPage>();
 
-
+        builder.Services.AddSingleton<SettingsPageViewModel>();
+        builder.Services.AddSingleton<SettingsPage>();
         return builder.Build();
 	}
 }

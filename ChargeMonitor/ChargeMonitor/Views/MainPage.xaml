@@ -4,22 +4,6 @@
              x:Class="ChargeMonitor.MainPage"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
-    <!--<ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
-
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
-
-
-        </VerticalStackLayout>
-    </ScrollView>-->
-
     <Grid RowDefinitions="Auto,*" RowSpacing="5">
 
         <!--< Header Row >-->
@@ -30,7 +14,7 @@
             
             <Label
                     Grid.Column="0"
-                    Text="Charge Monitor" Style="{StaticResource LargeLabel}"                
+                    Text="Charge Monitor" Style="{StaticResource LargeLabel}" FontAttributes="Bold"               
                     HorizontalOptions="Start" 
                     HorizontalTextAlignment="Start"
                     VerticalTextAlignment="Center" 
@@ -38,12 +22,12 @@
 
             <ImageButton 
                     Grid.Column="2"
-                    Source="settings.png"
-                    HeightRequest="50"
-                    WidthRequest="50"
-                    Padding="5"     
-                    HorizontalOptions="End" />
-            
+                    Source="settings_cog.svg"
+                    HeightRequest="60"
+                    WidthRequest="60"
+                    Padding="2"     
+                    HorizontalOptions="End" 
+                    Command="{Binding GoToSettingsPageCommand}"/>
         </Grid>
 
 
@@ -66,13 +50,12 @@
                     HorizontalOptions="Start"                
                     OnColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}"
                     ThumbColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}"
-                    IsToggled="{Binding IsBatteryWatched}"
-                    >
+                    IsToggled="{Binding IsBatteryWatched}">
                     
                     <Switch.Behaviors>
                         <toolkit:EventToCommandBehavior
                             EventName="Toggled"
-                            Command="{Binding BatteryMonitorSwitchToggledCommand}" />
+                            Command="{Binding BatteryMonitorSwitchToggledCommand}"/>
                     </Switch.Behaviors>
                 </Switch>
             </Grid>
@@ -92,15 +75,13 @@
                     PlaceholderColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"
                     IsEnabled="{Binding IsBatteryWatched}"
                     Text="{Binding BatteryChargeLimit, Mode=TwoWay}"
-                    ReturnCommand="{Binding SetBatteryChargeLimitCommand}"
-                    />
+                    ReturnCommand="{Binding SetBatteryChargeLimitCommand}"/>
                 <Label                   
                     Style="{StaticResource LargeLabel}"
                     VerticalTextAlignment="Center"
                     Text="%"                    
                     Padding="2"
-                    IsEnabled="{Binding IsBatteryWatched}"
-                    />
+                    IsEnabled="{Binding IsBatteryWatched}"/>
             </HorizontalStackLayout>
 
             <Slider
@@ -113,8 +94,7 @@
                 Value="{Binding BatteryChargeLimit, Mode=TwoWay}"
                 MinimumTrackColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}" 
                 ThumbColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}"
-                DragCompletedCommand="{Binding SetBatteryChargeLimitCommand}"
-                />
+                DragCompletedCommand="{Binding SetBatteryChargeLimitCommand}"/>
             
         </VerticalStackLayout>
         

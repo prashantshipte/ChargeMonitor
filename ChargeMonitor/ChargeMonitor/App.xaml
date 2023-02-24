@@ -7,22 +7,22 @@
         <ResourceDictionary>
             
             <!--Colors--> 
-            <Color x:Key="PrimaryLight">#50e3c2</Color>
+            <!--<Color x:Key="PrimaryLight">#50e3c2</Color>
             <Color x:Key="PrimaryDark">#50e3c2</Color>
 
             <Color x:Key="BarLight">#50e3c2</Color>
-            <Color x:Key="BarDark">#73ffe0</Color>
+            <Color x:Key="BarDark">#73ffe0</Color>-->
 
-            <!--<Color x:Key="PrimaryLight">#008fff</Color>
+            <Color x:Key="PrimaryLight">#008fff</Color>
             <Color x:Key="PrimaryDark">#45adff</Color>
 
             <Color x:Key="BarLight">#008fff</Color>
-            <Color x:Key="BarDark">#45adff</Color>-->
+            <Color x:Key="BarDark">#45adff</Color>
 
             <Color x:Key="BackgroundLight">#FAF9F8</Color>
             <Color x:Key="BackgroundDark">#121212</Color>
 
-            <Color x:Key="TextLight">#1F1F1F</Color>
+            <Color x:Key="TextLight">#0D0D0D</Color>
             <Color x:Key="TextDark">#FAF9F8</Color>
 
 

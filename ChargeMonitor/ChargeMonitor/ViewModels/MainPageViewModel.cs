@@ -1,13 +1,13 @@
 ﻿
-using ChargeMonitor.Services;
-
 namespace ChargeMonitor.ViewModels
 {
     public partial class MainPageViewModel : BaseViewModel
     {
         public ICommand BatteryMonitorSwitchToggledCommand { get; }
         public ICommand SetBatteryChargeLimitCommand { get; }
+        public AsyncRelayCommand GoToSettingsPageCommand { get; }
 
+       
         [ObservableProperty]
         bool isBatteryWatched;
 
@@ -22,17 +22,21 @@ namespace ChargeMonitor.ViewModels
             settingsService = _settingsService;
             BatteryMonitorSwitchToggledCommand = new Command(BatteryMonitorSwitchToggled);
             SetBatteryChargeLimitCommand = new Command(SetBatteryChargeLimit);
-            
+            GoToSettingsPageCommand = new AsyncRelayCommand(GoToSettingsPageAsync);
             LoadSettings();
         }
 
-
-        public void LoadSettings()
+        
+        private void LoadSettings()
         {
             IsBatteryWatched = settingsService.Get<bool>(nameof(IsBatteryWatched), false);
             BatteryChargeLimit = settingsService.Get<int>(nameof(BatteryChargeLimit), defaultBatteryChargeLimit);
         }
 
+        private async Task GoToSettingsPageAsync()
+        {
+            await Shell.Current.GoToAsync(nameof(SettingsPage), true);
+        }
 
         private void SetBatteryChargeLimit()
         {
