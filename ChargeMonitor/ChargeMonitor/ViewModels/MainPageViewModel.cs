@@ -29,8 +29,8 @@ namespace ChargeMonitor.ViewModels
         
         private void LoadSettings()
         {
-            IsBatteryWatched = settingsService.Get<bool>(nameof(IsBatteryWatched), false);
-            BatteryChargeLimit = settingsService.Get<int>(nameof(BatteryChargeLimit), defaultBatteryChargeLimit);
+            IsBatteryWatched = settingsService.Get<bool>(GlobalKeys.IsBatteryWatched, false);
+            BatteryChargeLimit = settingsService.Get<int>(GlobalKeys.BatteryChargeLimit, defaultBatteryChargeLimit);
         }
 
         private async Task GoToSettingsPageAsync()
@@ -40,7 +40,7 @@ namespace ChargeMonitor.ViewModels
 
         private void SetBatteryChargeLimit()
         {
-            settingsService.Save(nameof(BatteryChargeLimit), BatteryChargeLimit);
+            settingsService.Save(GlobalKeys.BatteryChargeLimit, BatteryChargeLimit);
         }
 
         private void BatteryMonitorSwitchToggled()

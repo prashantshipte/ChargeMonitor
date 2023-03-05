@@ -28,18 +28,18 @@ namespace ChargeMonitor.ViewModels
 
         private void LoadSettings()
         {
-            PushNotificationsEnabled = settingsService.Get<bool>(nameof(PushNotificationsEnabled), true);
-            SoundEnabled = settingsService.Get<bool>(nameof(SoundEnabled), true);
-            VibrationEnabled = settingsService.Get<bool>(nameof(VibrationEnabled), true);
-            DarkModeEnabled = settingsService.Get<bool>(nameof(darkModeEnabled), true);
+            PushNotificationsEnabled = settingsService.Get<bool>(GlobalKeys.PushNotificationsEnabled, true);
+            SoundEnabled = settingsService.Get<bool>(GlobalKeys.SoundEnabled, true);
+            VibrationEnabled = settingsService.Get<bool>(GlobalKeys.VibrationEnabled, true);
+            DarkModeEnabled = settingsService.Get<bool>(GlobalKeys.DarkModeEnabled, true);
         }
 
         private void SaveSettings()
         {
-            settingsService.Save(nameof(PushNotificationsEnabled), PushNotificationsEnabled);
-            settingsService.Save(nameof(SoundEnabled), SoundEnabled);
-            settingsService.Save(nameof(VibrationEnabled), VibrationEnabled);
-            settingsService.Save(nameof(DarkModeEnabled), DarkModeEnabled);            
+            settingsService.Save(GlobalKeys.PushNotificationsEnabled, PushNotificationsEnabled);
+            settingsService.Save(GlobalKeys.SoundEnabled, SoundEnabled);
+            settingsService.Save(GlobalKeys.VibrationEnabled, VibrationEnabled);
+            settingsService.Save(GlobalKeys.DarkModeEnabled, DarkModeEnabled);            
         }
 
         private async Task GoToMainPageAsync()
