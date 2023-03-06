@@ -15,15 +15,19 @@ namespace ChargeMonitor.ViewModels
         int batteryChargeLimit;
 
         private readonly ISettingsService settingsService;
+        private readonly INotificationService notificationService;
         private const int defaultBatteryChargeLimit = 80;
+        private bool userNotified = false;
 
-        public MainPageViewModel(ISettingsService _settingsService)
+        public MainPageViewModel(ISettingsService _settingsService, INotificationService  _notificationService)
         {
             settingsService = _settingsService;
+            notificationService = _notificationService;
             BatteryMonitorSwitchToggledCommand = new Command(BatteryMonitorSwitchToggled);
             SetBatteryChargeLimitCommand = new Command(SetBatteryChargeLimit);
             GoToSettingsPageCommand = new AsyncRelayCommand(GoToSettingsPageAsync);
             LoadSettings();
+            BatteryMonitorSwitchToggled();
         }
 
         
@@ -45,7 +49,7 @@ namespace ChargeMonitor.ViewModels
 
         private void BatteryMonitorSwitchToggled()
         {
-            if (!IsBatteryWatched)
+            if (IsBatteryWatched)
             {
                 Battery.Default.BatteryInfoChanged += Battery_BatteryInfoChanged;
             }
@@ -54,30 +58,90 @@ namespace ChargeMonitor.ViewModels
                 Battery.Default.BatteryInfoChanged -= Battery_BatteryInfoChanged;
             }
 
-            settingsService.Save(nameof(IsBatteryWatched), IsBatteryWatched);
+            settingsService.Save(GlobalKeys.IsBatteryWatched, IsBatteryWatched);
         }
 
-        private void Battery_BatteryInfoChanged(object sender, BatteryInfoChangedEventArgs e)
+        private async void Battery_BatteryInfoChanged(object sender, BatteryInfoChangedEventArgs e)
         {
-            // If battery is charging -
-            // if current charge level is already more then charge limit - 
+            switch (e.State)
+            {
+                case BatteryState.Charging:
+                    {
+                        var currentChargeLevel = (int)Math.Round(e.ChargeLevel * 100);
 
-            // if current charge level is equal to charge limit - 
-            // show popup + notification 
+                        if (currentChargeLevel > BatteryChargeLimit && !userNotified)
+                        {
+                            userNotified = true;
+                            await NotifyUserAsync();
+                        }
+                    }
+                    break;
+                case BatteryState.Discharging:
+                    {
+                        userNotified = false;
+                    }
+                    break;
+                case BatteryState.Full:
+                    {
+                        await BatteryFullNotificationAsync();
+                    }
+                    break;
+                case BatteryState.NotCharging:                    
+                case BatteryState.NotPresent:
+                case BatteryState.Unknown:                    
+                default:
+                    {
+                        await BatteryUnknownNotificationAsync();
+                    }
+                    break;
+            }
+        }      
 
+        private async Task NotifyUserAsync()
+        {
+            await ShowPushNotificationAsync();
+            await Shell.Current.DisplayAlert("Alert", "Battery charged above the desired charge limit. \r\nPlease disconnect charger", "OK");
+        }
 
-            //BatteryStateLabel.Text = e.State switch
-            //{
-            //    BatteryState.Charging => "Battery is currently charging",
-            //    BatteryState.Discharging => "Charger is not connected and the battery is discharging",
-            //    BatteryState.Full => "Battery is full",
-            //    BatteryState.NotCharging => "The battery isn't charging.",
-            //    BatteryState.NotPresent => "Battery is not available.",
-            //    BatteryState.Unknown => "Battery is unknown",
-            //    _ => "Battery is unknown"
-            //};
+        private async Task ShowPushNotificationAsync()
+        {
+            if (await LocalNotificationCenter.Current.AreNotificationsEnabled() == false)
+            {
+                await LocalNotificationCenter.Current.RequestNotificationPermission();
+            }
 
-            //BatteryLevelLabel.Text = $"Battery is {e.ChargeLevel * 100}% charged.";
+            var pushNotificationsEnabled = settingsService.Get<bool>(GlobalKeys.PushNotificationsEnabled, true);
+            var notificationSoundEnabled = settingsService.Get<bool>(GlobalKeys.NotificationSoundEnabled, true);
+            var vibrationEnabled = settingsService.Get<bool>(GlobalKeys.VibrationEnabled, true);
+
+            if (pushNotificationsEnabled)
+            {
+                var notificationRequest = new NotificationRequest()
+                {
+                    Title = "Battery charged above the desired charge limit. \r\nPlease disconnect charger",                                       
+                    Silent = !notificationSoundEnabled,
+                };                              
+
+                if (vibrationEnabled)
+                {
+                    notificationRequest.Android = new AndroidOptions()
+                    {
+                        VibrationPattern = new long[] { 500, 1000 }
+                    };
+                }
+
+                await notificationService.Show(notificationRequest);
+            }
+        }
+
+        private async Task BatteryFullNotificationAsync()
+        {
+            await Shell.Current.DisplayAlert("Alert", "Battery fully charged. \r\nPlease disconnect charger", "OK");
+        }
+
+        private async Task BatteryUnknownNotificationAsync()
+        {
+            await Shell.Current.DisplayAlert("Warning", "Battery status unknown.", "OK");
         }
 
         private void getBatteryHealth()

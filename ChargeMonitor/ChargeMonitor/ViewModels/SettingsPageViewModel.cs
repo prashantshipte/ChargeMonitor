@@ -9,7 +9,7 @@ namespace ChargeMonitor.ViewModels
         bool pushNotificationsEnabled;
 
         [ObservableProperty]
-        bool soundEnabled;
+        bool notificationSoundEnabled;
 
         [ObservableProperty]
         bool vibrationEnabled;
@@ -29,7 +29,7 @@ namespace ChargeMonitor.ViewModels
         private void LoadSettings()
         {
             PushNotificationsEnabled = settingsService.Get<bool>(GlobalKeys.PushNotificationsEnabled, true);
-            SoundEnabled = settingsService.Get<bool>(GlobalKeys.SoundEnabled, true);
+            NotificationSoundEnabled = settingsService.Get<bool>(GlobalKeys.NotificationSoundEnabled, true);
             VibrationEnabled = settingsService.Get<bool>(GlobalKeys.VibrationEnabled, true);
             DarkModeEnabled = settingsService.Get<bool>(GlobalKeys.DarkModeEnabled, true);
         }
@@ -37,7 +37,7 @@ namespace ChargeMonitor.ViewModels
         private void SaveSettings()
         {
             settingsService.Save(GlobalKeys.PushNotificationsEnabled, PushNotificationsEnabled);
-            settingsService.Save(GlobalKeys.SoundEnabled, SoundEnabled);
+            settingsService.Save(GlobalKeys.NotificationSoundEnabled, NotificationSoundEnabled);
             settingsService.Save(GlobalKeys.VibrationEnabled, VibrationEnabled);
             settingsService.Save(GlobalKeys.DarkModeEnabled, DarkModeEnabled);            
         }

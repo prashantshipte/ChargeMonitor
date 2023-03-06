@@ -11,7 +11,7 @@ namespace ChargeMonitor
         public const string IsBatteryWatched = "IsBatteryWatched";
         public const string BatteryChargeLimit = "BatteryChargeLimit";
         public const string PushNotificationsEnabled = "PushNotificationsEnabled";
-        public const string SoundEnabled = "SoundEnabled";
+        public const string NotificationSoundEnabled = "NotificationSoundEnabled";
         public const string VibrationEnabled = "VibrationEnabled";
         public const string DarkModeEnabled = "DarkModeEnabled";            
     }

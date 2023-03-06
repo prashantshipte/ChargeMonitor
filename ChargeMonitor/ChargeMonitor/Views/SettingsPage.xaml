@@ -57,7 +57,7 @@
                 <Label
                     Grid.Column="0"
                     Style="{StaticResource MediumLabel}"
-                    Text="Enable Sound"
+                    Text="Enable Notification Sound"
                     Padding="15,25,5,5"/>
 
                 <Switch 
@@ -70,7 +70,7 @@
                     HorizontalOptions="Start"                
                     OnColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}"
                     ThumbColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}"
-                    IsToggled="{Binding SoundEnabled }">
+                    IsToggled="{Binding NotificationSoundEnabled }">
                 </Switch>
             </Grid>
 
