@@ -22,7 +22,7 @@
 
             <ImageButton 
                     Grid.Column="2"
-                    Source="settings_cog.svg"
+                    Source="{AppThemeBinding Light=settings_cog_light.png, Dark=settings_cog_dark.png}"
                     HeightRequest="60"
                     WidthRequest="60"
                     Padding="5"     
@@ -62,6 +62,7 @@
 
             <Label                   
                     Style="{StaticResource MediumLabel}"
+                    TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"  
                     Text="Notify me when battery is charged : "
                     Padding="15"
                     IsEnabled="{Binding IsBatteryWatched}"/>
@@ -78,6 +79,8 @@
                     ReturnCommand="{Binding SetBatteryChargeLimitCommand}"/>
                 <Label                   
                     Style="{StaticResource LargeLabel}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource TextLight}, Dark={StaticResource TextDark}}"
                     VerticalTextAlignment="Center"
                     Text="%"                    
                     Padding="2"

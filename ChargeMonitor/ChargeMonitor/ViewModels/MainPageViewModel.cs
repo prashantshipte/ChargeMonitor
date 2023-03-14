@@ -2,12 +2,7 @@
 namespace ChargeMonitor.ViewModels
 {
     public partial class MainPageViewModel : BaseViewModel
-    {
-        public ICommand BatteryMonitorSwitchToggledCommand { get; }
-        public ICommand SetBatteryChargeLimitCommand { get; }
-        public AsyncRelayCommand GoToSettingsPageCommand { get; }
-
-       
+    {       
         [ObservableProperty]
         bool isBatteryWatched;
 
@@ -23,30 +18,44 @@ namespace ChargeMonitor.ViewModels
         {
             settingsService = _settingsService;
             notificationService = _notificationService;
-            BatteryMonitorSwitchToggledCommand = new Command(BatteryMonitorSwitchToggled);
-            SetBatteryChargeLimitCommand = new Command(SetBatteryChargeLimit);
-            GoToSettingsPageCommand = new AsyncRelayCommand(GoToSettingsPageAsync);
+            ApplyTheme();
             LoadSettings();
-            BatteryMonitorSwitchToggled();
+            RegisterEvents();
         }
 
-        
+        private void ApplyTheme()
+        {
+            var darkModeEnabled = settingsService.Get<bool>(GlobalKeys.DarkModeEnabled, false);
+            Application.Current.UserAppTheme = darkModeEnabled ? AppTheme.Dark : AppTheme.Light;
+        }
+
         private void LoadSettings()
         {
             IsBatteryWatched = settingsService.Get<bool>(GlobalKeys.IsBatteryWatched, false);
             BatteryChargeLimit = settingsService.Get<int>(GlobalKeys.BatteryChargeLimit, defaultBatteryChargeLimit);
         }
 
+        private void RegisterEvents()
+        {
+            if (IsBatteryWatched)
+            {
+                Battery.Default.BatteryInfoChanged += Battery_BatteryInfoChanged;                
+            }
+        }
+
+        [RelayCommand]
         private async Task GoToSettingsPageAsync()
         {
             await Shell.Current.GoToAsync(nameof(SettingsPage), true);
         }
 
+        [RelayCommand]
         private void SetBatteryChargeLimit()
         {
             settingsService.Save(GlobalKeys.BatteryChargeLimit, BatteryChargeLimit);
         }
 
+        [RelayCommand]
         private void BatteryMonitorSwitchToggled()
         {
             if (IsBatteryWatched)
@@ -76,6 +85,7 @@ namespace ChargeMonitor.ViewModels
                         }
                     }
                     break;
+                case BatteryState.NotCharging:
                 case BatteryState.Discharging:
                     {
                         userNotified = false;
@@ -85,11 +95,9 @@ namespace ChargeMonitor.ViewModels
                     {
                         await BatteryFullNotificationAsync();
                     }
-                    break;
-                case BatteryState.NotCharging:                    
+                    break;                                
                 case BatteryState.NotPresent:
                 case BatteryState.Unknown:                    
-                default:
                     {
                         await BatteryUnknownNotificationAsync();
                     }
