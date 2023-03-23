@@ -27,7 +27,7 @@ namespace ChargeMonitor.ViewModels
         {
             PushNotificationsEnabled = settingsService.Get<bool>(GlobalKeys.PushNotificationsEnabled, true);
             NotificationSoundEnabled = settingsService.Get<bool>(GlobalKeys.NotificationSoundEnabled, true);
-            VibrationEnabled = settingsService.Get<bool>(GlobalKeys.VibrationEnabled, true);
+            VibrationEnabled = settingsService.Get<bool>(GlobalKeys.VibrationEnabled, false);
             DarkModeEnabled = settingsService.Get<bool>(GlobalKeys.DarkModeEnabled, false);
         }
 

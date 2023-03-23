@@ -53,6 +53,7 @@
 	  <None Remove="Resources\Images\back_arrow_light.png" />
 	  <None Remove="Resources\Images\settings_cog_dark.png" />
 	  <None Remove="Resources\Images\settings_cog_light.png" />
+	  <None Remove="Resources\Raw\notification_sound.mp3" />
 	  <None Remove="Resources\Splash\splash.svg" />
 	</ItemGroup>
 	
@@ -61,6 +62,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Plugin.LocalNotification" Version="10.1.4" />
+		<PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

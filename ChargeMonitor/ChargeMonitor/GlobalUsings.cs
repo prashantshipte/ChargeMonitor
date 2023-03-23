@@ -7,6 +7,7 @@ global using CommunityToolkit.Maui;
 global using Plugin.LocalNotification;
 global using Plugin.LocalNotification.AndroidOption;
 global using Plugin.LocalNotification.iOSOption;
+global using Plugin.Maui.Audio;
 global using System;
 global using System.Collections.Generic;
 global using System.Collections.ObjectModel;

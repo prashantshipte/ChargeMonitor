@@ -22,9 +22,10 @@ public static class MauiProgram
 #endif
 		//Register Services
 		builder.Services.AddSingleton<ISettingsService, SettingsService>();
+		builder.Services.AddSingleton(AudioManager.Current);
 
-		//Register VM first as it needs to be injected in the View
-		builder.Services.AddSingleton<MainPageViewModel>();
+        //Register VM first as it needs to be injected in the View
+        builder.Services.AddSingleton<MainPageViewModel>();
         builder.Services.AddSingleton<MainPage>();
 
         builder.Services.AddSingleton<SettingsPageViewModel>();

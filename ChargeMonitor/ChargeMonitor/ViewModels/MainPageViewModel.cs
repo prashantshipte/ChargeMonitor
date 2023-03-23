@@ -11,16 +11,18 @@ namespace ChargeMonitor.ViewModels
 
         private readonly ISettingsService settingsService;
         private readonly INotificationService notificationService;
+        private readonly IAudioManager audioManager;
         private const int defaultBatteryChargeLimit = 80;
         private bool userNotified = false;
 
-        public MainPageViewModel(ISettingsService _settingsService, INotificationService  _notificationService)
+        public MainPageViewModel(ISettingsService _settingsService, INotificationService  _notificationService, IAudioManager _audioManager)
         {
             settingsService = _settingsService;
             notificationService = _notificationService;
-            ApplyTheme();
+            audioManager = _audioManager;
             LoadSettings();
             RegisterEvents();
+            ApplyTheme();
         }
 
         private void ApplyTheme()
@@ -107,8 +109,31 @@ namespace ChargeMonitor.ViewModels
 
         private async Task NotifyUserAsync()
         {
+            var pushNotificationsEnabled = settingsService.Get<bool>(GlobalKeys.PushNotificationsEnabled, true);
+            var notificationSoundEnabled = settingsService.Get<bool>(GlobalKeys.NotificationSoundEnabled, true);
+            var vibrationEnabled = settingsService.Get<bool>(GlobalKeys.VibrationEnabled, true);
+
+            // push notification
+            if (pushNotificationsEnabled)
+            {
             await ShowPushNotificationAsync();
+            }
+
+            // play sound
+            if (notificationSoundEnabled)
+            {
+                await PlayNotificationSoundAsync();
+            }
+
+            // vibration
+            if (vibrationEnabled)
+            {
+                VibrateDevice();
+            }
+
+            // in-app notification
             await Shell.Current.DisplayAlert("Alert", "Battery charged above the desired charge limit. \r\nPlease disconnect charger", "OK");
+
         }
 
         private async Task ShowPushNotificationAsync()
@@ -127,19 +152,30 @@ namespace ChargeMonitor.ViewModels
                 var notificationRequest = new NotificationRequest()
                 {
                     Title = "Battery charged above the desired charge limit. \r\nPlease disconnect charger",                                       
-                    Silent = !notificationSoundEnabled,
+                Silent = true,
                 };                              
 
-                if (vibrationEnabled)
+            //if (vibrationEnabled)
+            //{
+            //    notificationRequest.Android = new AndroidOptions()
+            //    {
+            //        VibrationPattern = new long[] { 500, 1000 }
+            //    };
+            //}
+
+            await notificationService.Show(notificationRequest);
+        }
+
+        private async Task PlayNotificationSoundAsync()
                 {
-                    notificationRequest.Android = new AndroidOptions()
-                    {
-                        VibrationPattern = new long[] { 500, 1000 }
-                    };
+            var audioPlayer = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("notification_sound.mp3"));
+            audioPlayer.Play();
                 }
 
-                await notificationService.Show(notificationRequest);
-            }
+        private void VibrateDevice()
+        {
+            TimeSpan vibrationLength = TimeSpan.FromSeconds(2);
+            Vibration.Default.Vibrate(vibrationLength);
         }
 
         private async Task BatteryFullNotificationAsync()
